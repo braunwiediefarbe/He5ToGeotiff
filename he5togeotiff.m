@@ -5,6 +5,9 @@
 %Place the script inside a folder with two additional folders on the same
 %file level. One must be called "input_data", the other one "output_data".
 %If the output folder does not exist, the script will create it for you.
+%Note that you need matlab version 2016b or later to process this script
+%properly, otherwise the function must be excluded into another file.
+
 clear
 
 % Open the HDF5 File.
