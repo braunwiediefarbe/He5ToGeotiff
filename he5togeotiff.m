@@ -6,7 +6,8 @@
 %file level. One must be called "input_data", the other one "output_data".
 %If the output folder does not exist, the script will create it for you.
 %Note that you need matlab version 2016b or later to process this script
-%properly, otherwise the function must be excluded into another file.
+%properly, otherwise the function "convertHe5ToGeotiff" must be excluded 
+%into another file and placed in the same folder as this script
 
 clear
 
@@ -123,6 +124,8 @@ function result = convertHe5ToGeotiff(data_list)
         %--> method 2
 
         % method = 'linear';
+        % latlim=[floor(min(min(lat))),ceil(max(max(lat)))];
+        % lonlim=[floor(min(min(lon))),ceil(max(max(lon)))];
         % F = TriScatteredInterp(double(lon(:)),double(lat(:)),data(:),method);
         % halfcell = cellsize/2;
         % [lonmesh, latmesh] = meshgrid( ...
@@ -131,14 +134,17 @@ function result = convertHe5ToGeotiff(data_list)
         % Z = F(lonmesh, latmesh);
         % refvec = [1/cellsize, latlim(1) + cellsize*size(Z,1), lonlim(1)];
 
-        %--> methode 3
-
-        %[Z, refvec] = gridmap(double(lat),double(lon), data, cellsize);
 
         R = refvecToGeoRasterReference(refvec,size(Z));
         file_new = strrep(file, '.he5','.tif');
         file_out_location = fullfile(pwd, 'output_data', file_new);
         geotiffwrite(file_out_location,Z,R)
+        
+        %Testing output
+        
+        %figure; 
+        %geoshow(Z,R,'DisplayType','surface','ZData',zeros(size(Z)),'CData',Z)
+        %demcmap(Z)
     end
 
     result = 'true';
